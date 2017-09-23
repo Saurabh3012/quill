@@ -161,6 +161,10 @@ var schema = new mongoose.Schema({
       ]
   },
 
+    githubToken: {
+        type: String
+    },
+
   password: {
     type: String,
     required: true,
@@ -219,8 +223,7 @@ var schema = new mongoose.Schema({
    */
   confirmation: confirmation,
 
-  status: status,
-
+  status: status
 });
 
 schema.set('toJSON', {

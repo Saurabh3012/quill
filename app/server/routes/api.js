@@ -3,6 +3,9 @@ var SettingsController = require('../controllers/SettingsController');
 
 var request = require('request');
 
+var CLIENT_ID = "77b6232fc280ef23931c";
+var CLIENT_SECRET = "4e2e6c285bead87ff0deac22aabf8cf521f28e84";
+
 module.exports = function(router) {
 
   function getToken(req){
@@ -55,6 +58,7 @@ module.exports = function(router) {
       }
 
       if (user._id == userId || user.admin){
+        uuid = user._id;
         return next();
       }
       return res.status(400).send({
@@ -160,7 +164,62 @@ module.exports = function(router) {
     var profile = req.body.profile;
     var id = req.params.id;
 
+    //github oauth
+
     UserController.updateProfileById(id, profile , defaultResponse(req, res));
+  });
+
+
+  router.get('/users/:id/github', function (req, res) {
+
+    var id = req.params.id;
+    var url = "http://github.com/login/oauth/authorize?client_id="+CLIENT_ID+
+        "&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fusers%2Fgithub%2Fcallback&state="+
+        id;
+    //url = encodeURIComponent(url);
+
+    res.json({ url: url });
+
+  });
+
+  router.get('/users/github/callback', function (req, res) {
+     var state = req.query.state;
+     var code = req.query.code;
+     console.log("State");
+     console.log(state);
+     console.log("Code");
+     console.log(code);
+
+      request.post(
+          'https://github.com/login/oauth/access_token',
+          {
+            json: {
+              client_id: CLIENT_ID,
+              client_secret: CLIENT_SECRET,
+              code: code,
+              state: state
+            }
+          },
+          function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                  console.log(body);
+                  UserController.updateToken(state, body.access_token, function (err, data) {
+                      if(err){
+                        console.log(err);
+                        res.json({ success: false });
+                      }else{
+                          console.log(data);
+                          res.json( { success: true, message: "Linking github." } );
+                      }
+                  });
+
+              }else{
+                console.log(error);
+                res.json( { success: false, message: "Something went wrong!!" } );
+              }
+          }
+      );
+
   });
 
   /**

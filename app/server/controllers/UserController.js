@@ -270,6 +270,17 @@ UserController.getById = function (id, callback){
   User.findById(id, callback);
 };
 
+UserController.updateToken = function (id, token, callback) {
+
+    var query = {'_id':id};
+    User.findOneAndUpdate(query, {
+      githubToken: token
+    }, {
+      upsert:true
+    }, callback);
+
+};
+
 /**
  * Update a user's profile object, given an id and a profile.
  *

@@ -156,4 +156,8 @@ module.exports = function(router){
       });
     });
 
+   router.get('/github', function(req, res){
+
+   });
+
 };
