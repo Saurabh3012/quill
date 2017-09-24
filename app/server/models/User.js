@@ -165,6 +165,10 @@ var schema = new mongoose.Schema({
         type: String
     },
 
+    githubUrl: {
+        type: String
+    },
+
   password: {
     type: String,
     required: true,
