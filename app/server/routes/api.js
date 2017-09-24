@@ -202,7 +202,34 @@ module.exports = function(router) {
           },
           function (error, response, body) {
               if (!error && response.statusCode == 200) {
+                console.log("bbbbbooodddyy");
                   console.log(body);
+
+                  var prourl = "http://api.github.com/user?access_token="+body.access_token;
+                  var headers = { 
+                      'User-Agent': 'HashHacks' 
+                  };
+
+                  request.get({url: prourl, headers: headers}, function (error, response, body2) {
+                    if (!error && response.statusCode == 200) {
+                    
+
+                    UserController.updateGithubUrl(state, JSON.parse(body2).login, function (err, data) {
+                        if(err){
+                          console.log(err);
+                        }else{
+                            console.log(data);
+                        }
+                    });
+
+                  } else{
+                    console.log(error);
+                  }
+
+                  });
+
+
+
                   UserController.updateToken(state, body.access_token, function (err, data) {
                       if(err){
                         console.log(err);
@@ -212,6 +239,8 @@ module.exports = function(router) {
                           res.json( { success: true, message: "Linking github." } );
                       }
                   });
+
+
 
               }else{
                 console.log(error);

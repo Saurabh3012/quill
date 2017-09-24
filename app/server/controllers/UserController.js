@@ -281,6 +281,17 @@ UserController.updateToken = function (id, token, callback) {
 
 };
 
+UserController.updateGithubUrl = function (id, ghurl, callback) {
+    console.log("reached update github url----- " + ghurl);
+    var query = {'_id':id};
+    User.findOneAndUpdate(query, {
+      githubUrl: ghurl
+    }, {
+      upsert:true
+    }, callback);
+
+};
+
 /**
  * Update a user's profile object, given an id and a profile.
  *
