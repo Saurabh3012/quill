@@ -205,7 +205,7 @@ module.exports = function(router) {
                 console.log("bbbbbooodddyy");
                   console.log(body);
 
-                  var prourl = "http://api.github.com/user?access_token="+body.access_token;
+                  var prourl = "https://api.github.com/user?access_token="+body.access_token;
                   var headers = { 
                       'User-Agent': 'HashHacks' 
                   };

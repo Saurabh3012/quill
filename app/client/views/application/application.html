@@ -54,11 +54,20 @@
             <option value="2019">2019</option>
           </select>
         </div>
-
+<!--ng-show="user.githubUrl == NULL" -->
         <div class="field">
           <a href="" id="oauthlink">Link Github Account</a>
           
         </div>
+
+        <div class="field">
+          <label>Github Username</label>
+          <input disabled="disabled"
+                 ng-model="user.githubUrl">
+
+          
+        </div>
+
 
         <div class="field">
           <label>Gender</label>
